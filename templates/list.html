@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Saved interview feedback</h2>
+
+  {% if feedback_items %}
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Candidate</th>
+          <th>Interviewer</th>
+          <th>Date</th>
+          <th>Position</th>
+          <th>Rating</th>
+          <th>Feedback</th>
+          <th>Submitted</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in feedback_items %}
+          <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.candidate_name }}</td>
+            <td>{{ item.interviewer_name or '-' }}</td>
+            <td>{{ item.interview_date or '-' }}</td>
+            <td>{{ item.position or '-' }}</td>
+            <td>{{ item.rating or '-' }}</td>
+            <td>{{ item.feedback or '-' }}</td>
+            <td>{{ item.submitted_at }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No interview feedback has been saved yet.</p>
+  {% endif %}
+{% endblock %}

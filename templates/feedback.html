@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Submit interview feedback</h2>
+  <form method="post">
+    <label for="candidate_name">Candidate name</label>
+    <input id="candidate_name" name="candidate_name" required>
+
+    <label for="interviewer_name">Interviewer name</label>
+    <input id="interviewer_name" name="interviewer_name">
+
+    <label for="interview_date">Interview date</label>
+    <input id="interview_date" name="interview_date" type="date">
+
+    <label for="position">Position / role</label>
+    <input id="position" name="position">
+
+    <label for="rating">Rating</label>
+    <select id="rating" name="rating">
+      <option value="">Select rating</option>
+      <option value="1">1 - Poor</option>
+      <option value="2">2 - Fair</option>
+      <option value="3">3 - Good</option>
+      <option value="4">4 - Very good</option>
+      <option value="5">5 - Excellent</option>
+    </select>
+
+    <label for="feedback">Feedback</label>
+    <textarea id="feedback" name="feedback" rows="6"></textarea>
+
+    <button type="submit">Save feedback</button>
+  </form>
+{% endblock %}
