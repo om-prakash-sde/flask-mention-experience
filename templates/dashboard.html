@@ -2,82 +2,181 @@
 
 {% block content %}
   <style>
-    .dashboard-shell {
+    body {
+      background: #f3f5f8;
+      color: #1f2937;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .panel-container {
       display: grid;
-      grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
-      gap: 24px;
-      width: 100%;
-      min-height: 70vh;
-      align-items: stretch;
+      grid-template-columns: clamp(220px, 22vw, 300px) minmax(0, 1fr);
+      gap: 22px;
+      width: min(100%, 1400px);
+      min-height: calc(100vh - 120px);
       margin: 0 auto;
+      align-items: stretch;
     }
 
     .thumb-panel,
     .content-panel {
       background: #ffffff;
-      border: 1px solid #dfe7f1;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
-      padding: 20px;
-      width: 100%;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
       box-sizing: border-box;
     }
 
+    .thumb-panel {
+      padding: 18px;
+      overflow: auto;
+    }
+
+    .content-panel {
+      padding: 22px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
     .thumb-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(100px, 1fr));
-      gap: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       width: 100%;
     }
 
     .thumb {
       appearance: none;
-      border: 1px solid #dfe7f1;
-      background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
-      border-radius: 14px;
-      padding: 22px 12px;
-      text-align: center;
-      cursor: pointer;
-      font-size: 1rem;
-      color: #1f2937;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
       width: 100%;
-      min-height: 110px;
+      background: linear-gradient(180deg, #f8fafc 0%, #eef4ff 100%);
+      border: 1px solid #dbe4f1;
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.98rem;
+      color: #1f2937;
+      transition: all 0.18s ease;
+      min-height: 56px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       box-sizing: border-box;
+      font-weight: 600;
     }
 
     .thumb:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(44, 88, 180, 0.12);
+      transform: translateX(2px);
+      box-shadow: 0 8px 18px rgba(59, 130, 246, 0.1);
     }
 
-    .thumb strong {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 1.05rem;
+    .thumb.active {
+      background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
+      border-color: #1d4ed8;
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18);
     }
 
-    .content-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+    .tab-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+    }
+
+    .tab-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      font-size: 0.78rem;
+      font-weight: 700;
     }
 
     .content-section {
       display: none;
+      width: 100%;
+      min-width: 0;
     }
 
     .content-section.active {
       display: block;
     }
 
-    .section-title {
-      margin-top: 0;
+    .content-banner {
+      background: linear-gradient(180deg, #f8fbff 0%, #edf4ff 100%);
+      border: 1px solid #dfe7f1;
+      border-radius: 12px;
+      padding: 12px 14px;
       margin-bottom: 18px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .section-title {
+      margin: 0 0 18px;
+      font-size: 1.5rem;
+      color: #111827;
+    }
+
+    form {
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    input,
+    select,
+    textarea,
+    button {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 8px;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    button[type="submit"] {
+      margin-top: 18px;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(180deg, #2563eb, #1d4ed8);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      background: #fff;
+    }
+
+    th,
+    td {
+      border: 1px solid #e2e8f0;
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f8fafc;
     }
 
     .api-box {
@@ -87,39 +186,51 @@
       padding: 16px;
       overflow: auto;
       max-height: 420px;
+      margin-top: 12px;
     }
 
-    @media (max-width: 800px) {
-      .dashboard-shell {
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #0f172a;
+    }
+
+    @media (max-width: 900px) {
+      .panel-container {
+        display: grid;
         grid-template-columns: 1fr;
+        width: min(100%, 100vw);
+        min-height: auto;
+      }
+
+      .thumb-panel,
+      .content-panel {
+        overflow: visible;
       }
     }
   </style>
 
-  <h2>Dashboard</h2>
-
-  <div class="dashboard-shell">
+  <div class="panel-container">
     <aside class="thumb-panel">
       <div class="thumb-grid">
         <button class="thumb active" data-target="form-panel">
-          <strong>Save</strong>
-          Feedback
+          <span class="tab-label"><span class="tab-badge">01</span> Save Feedback</span>
         </button>
 
         <button class="thumb" data-target="list-panel">
-          <strong>List</strong>
-          Feedback
+          <span class="tab-label"><span class="tab-badge">02</span> Feedback List</span>
         </button>
 
-        <button class="thumb" data-target="api-panel" style="grid-column: 1 / -1;">
-          <strong>API</strong>
-          JSON Data
+        <button class="thumb" data-target="api-panel">
+          <span class="tab-label"><span class="tab-badge">03</span> API JSON</span>
         </button>
       </div>
     </aside>
 
-    <section class="content-panel">
+    <section class="content-panel" role="banner">
       <div id="form-panel" class="content-section active">
+        <div class="content-banner">Save Feedback</div>
         <h3 class="section-title">Submit interview feedback</h3>
         <form method="post" action="{{ url_for('feedback_form') }}">
           <label for="candidate_name">Candidate name</label>
@@ -152,6 +263,7 @@
       </div>
 
       <div id="list-panel" class="content-section">
+        <div class="content-banner">Feedback List</div>
         <h3 class="section-title">Saved interview feedback</h3>
 
         {% if feedback_items %}
@@ -187,8 +299,9 @@
       </div>
 
       <div id="api-panel" class="content-section">
-        <h3 class="section-title">API JSON response</h3>
+        <div class="content-banner">API JSON</div>
         <div class="api-box">
+          <h3 class="section-title">API JSON response</h3>
           <pre>{{ feedback_items | tojson(indent=2) }}</pre>
         </div>
       </div>
